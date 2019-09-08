@@ -1,0 +1,10 @@
+dotnet test
+dotnet test --filter Category=Enemy
+dotnet test --filter Category=Boss
+dotnet test --filter "Category=Boss|Category=Enemy"
+dotnet test /?
+dotnet test -v n
+#run all test in category boss and put the output inside TestResults\oldmonkey_DESKTOP-3477AFV_2019-09-08_15_14_18.trx
+dotnet test --filter Category=Boss  --logger:trx
+
+#for further info on Test loggers got to http://bit.ly/pstestrunner
