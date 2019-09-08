@@ -165,7 +165,94 @@ namespace GameEngine.Tests
                 /*action cause the event to fire*/() => _sut.TakeDamage(10));
         }
 
-        //centralize any cleanup code by implementing IDisposable and adding common cleanup code to the Dispose method
+        [Fact(Skip = "Ignored due to duplication, Theory and InlineData")]
+        public void Should_Take_Zero_Damage()
+        {
+            _sut.TakeDamage(0);
+            Assert.Equal(100,_sut.Health);
+        }
+
+        [Fact(Skip = "Ignored due to duplication, Replaced by Theory and InlineData")]
+        public void Should_Take_Small_Damage()
+        {
+            _sut.TakeDamage(1);
+            Assert.Equal(99, _sut.Health);
+        }
+
+        [Fact(Skip = "Ignored due to duplication, Replaced by Theory and InlineData")]
+        public void Should_Take_Medium_Damage()
+        {
+            _sut.TakeDamage(50);
+            Assert.Equal(50, _sut.Health);
+        }
+
+        [Fact(Skip = "Ignored due to duplication, Replaced by Theory and InlineData")]
+        public void Should_Take_Mininum_Damage()
+        {
+            _sut.TakeDamage(101);
+            Assert.Equal(1, _sut.Health);
+        }
+
+        //The theory attribute tells xUnit that this test method should be executed multiple times,
+        //and for each execution, this test method needs to be provided with some test data.
+        [Theory]
+        //drawbacks: we can't share test case data across multiple test methods or test classes
+        [InlineData(0,100)]
+        [InlineData(1, 99)]
+        [InlineData(50, 50)]
+        [InlineData(101, 1)]
+        public void Should_Take_Damage_Test_Inline_Data_Driven(int damage, int expectedHealth)
+        {
+            _sut.TakeDamage(damage);
+            Assert.Equal(expectedHealth, _sut.Health);
+        }
+
+
+        //The theory attribute tells xUnit that this test method should be executed multiple times,
+        //and for each execution, this test method needs to be provided with some test data.
+        [Theory]
+        [MemberData(nameof(InternalHealthDamageData.TestData), MemberType = typeof(InternalHealthDamageData))]
+        public void Should_Take_Damage_Test_InternalDataClass_Driven(int damage, int expectedHealth)
+        {
+            _sut.TakeDamage(damage);
+            Assert.Equal(expectedHealth, _sut.Health);
+        }
+
+
+        //The theory attribute tells xUnit that this test method should be executed multiple times,
+        //and for each execution, this test method needs to be provided with some test data.
+        [Theory]
+        [MemberData(nameof(ExternalHealthDamageData.TestData), MemberType = typeof(ExternalHealthDamageData))]
+        public void Should_Take_Damage_Test_ExternalDataClass_Driven(int damage, int expectedHealth)
+        {
+            _sut.TakeDamage(damage);
+            Assert.Equal(expectedHealth, _sut.Health);
+        }
+
+
+
+        //The theory attribute tells xUnit that this test method should be executed multiple times,
+        //and for each execution, this test method needs to be provided with some test data.
+        [Theory]
+        [HealthDamageDataInternal]
+        public void Should_Take_Damage_Test_InternalDataClass_CustomAttribute(int damage, int expectedHealth)
+        {
+            _sut.TakeDamage(damage);
+            Assert.Equal(expectedHealth, _sut.Health);
+        }
+
+        //The theory attribute tells xUnit that this test method should be executed multiple times,
+        //and for each execution, this test method needs to be provided with some test data.
+        [Theory]
+        [HealthDamageDataExternal("TestData.csv")]
+        public void Should_Take_Damage_Test_ExternalDataClass_CustomAttribute(int damage, int expectedHealth)
+        {
+            _sut.TakeDamage(damage);
+            Assert.Equal(expectedHealth, _sut.Health);
+        }
+
+
+        //Centralize any cleanup code by implementing IDisposable and adding common cleanup code to the Dispose method
         public void Dispose()
         {
             //To perform any clean up code we use IDisposable
