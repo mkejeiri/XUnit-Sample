@@ -1,2 +1,2 @@
-# Xunit Samples
-# Autofixture Samples with Xunit
+# Xunit samples
+# Autofixture samples with Xunit : autodata and automoq
